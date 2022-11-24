@@ -124,8 +124,8 @@ ALTER TABLE booking ADD CONSTRAINT PK_booking PRIMARY KEY (id);
 
 CREATE TABLE ensemble_lesson (
  lesson_id INT NOT NULL,
- max_num_students NUMERIC(5) NOT NULL,
- min_num_students NUMERIC(5) NOT NULL,
+ max_num_students INT NOT NULL,
+ min_num_students INT NOT NULL,
  genre VARCHAR(50) NOT NULL
 );
 
@@ -134,8 +134,8 @@ ALTER TABLE ensemble_lesson ADD CONSTRAINT PK_ensemble_lesson PRIMARY KEY (lesso
 
 CREATE TABLE group_lesson (
  lesson_id INT NOT NULL,
- max_num_students NUMERIC(5) NOT NULL,
- min_num_students NUMERIC(5) NOT NULL,
+ max_num_students INT NOT NULL,
+ min_num_students INT NOT NULL,
  instrument_type_id INT NOT NULL
 );
 
