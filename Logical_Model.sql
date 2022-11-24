@@ -60,7 +60,7 @@ ALTER TABLE student ADD CONSTRAINT PK_student PRIMARY KEY (person_id);
 
 CREATE TABLE instructor (
  person_id INT NOT NULL,
- ensamble_teacher BOOLEAN NOT NULL
+ ensemble_teacher BOOLEAN NOT NULL
 );
 
 ALTER TABLE instructor ADD CONSTRAINT PK_instructor PRIMARY KEY (person_id);
@@ -122,14 +122,14 @@ CREATE TABLE booking (
 ALTER TABLE booking ADD CONSTRAINT PK_booking PRIMARY KEY (id);
 
 
-CREATE TABLE ensamble_lesson (
+CREATE TABLE ensemble_lesson (
  lesson_id INT NOT NULL,
  max_num_students NUMERIC(5) NOT NULL,
  min_num_students NUMERIC(5) NOT NULL,
  genre VARCHAR(50) NOT NULL
 );
 
-ALTER TABLE ensamble_lesson ADD CONSTRAINT PK_ensamble_lesson PRIMARY KEY (lesson_id);
+ALTER TABLE ensemble_lesson ADD CONSTRAINT PK_ensemble_lesson PRIMARY KEY (lesson_id);
 
 
 CREATE TABLE group_lesson (
@@ -186,7 +186,7 @@ ALTER TABLE booking ADD CONSTRAINT FK_booking_0 FOREIGN KEY (student_id) REFEREN
 ALTER TABLE booking ADD CONSTRAINT FK_booking_1 FOREIGN KEY (lesson_id) REFERENCES lesson (id) ON DELETE SET NULL;
 
 
-ALTER TABLE ensamble_lesson ADD CONSTRAINT FK_ensamble_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id) ON DELETE CASCADE;
+ALTER TABLE ensemble_lesson ADD CONSTRAINT FK_ensemble_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id) ON DELETE CASCADE;
 
 
 ALTER TABLE group_lesson ADD CONSTRAINT FK_group_lesson_0 FOREIGN KEY (lesson_id) REFERENCES lesson (id) ON DELETE CASCADE;
