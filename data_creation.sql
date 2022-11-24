@@ -103,6 +103,16 @@ VALUES
 
 INSERT INTO group_lesson (lesson_id, max_num_students, min_num_students, instrument_type_id)
 VALUES
-    (3,15,2,2),
-    (4,15,2,2);
+    (3,15,2,2), --flute
+    (4,15,2,2); --flute
 
+INSERT INTO booking (student_id, lesson_id, time_of_booking)
+VALUES
+    (2,1,now()),
+    (3,2,now()),
+    (3,3,now()),
+    (4,3,now()),
+    (3,4,now()),
+    (4,4,now()),
+    (2,5,now()),
+    (3,5,now());
