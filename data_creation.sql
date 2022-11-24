@@ -63,8 +63,8 @@ INSERT INTO sibling_relation (student_id_1, student_id_2)
 
 INSERT INTO instructor (person_id, ensemble_teacher)
 VALUES
-    (6, 'Yes'),
-    (7, 'No');
+    (6, 'No'),
+    (7, 'Yes');
 
 INSERT INTO instructor_proficiencies (instructor_id, instrument_id)
 VALUES
@@ -74,6 +74,13 @@ VALUES
     (7, 1),
     (7, 2),
     (7, 4);
+
+INSERT INTO instrument_lease (lease_start, student_id, instruments_id)
+VALUES
+    ('2022-11-30', 2, 6),
+    ('2022-10-05', 3, 10),
+    ('2022-09-20', 2, 1),
+    ('2022-08-17', 4, 5);
 
 INSERT INTO schedule_time (time, date, instructor_id)
 VALUES
