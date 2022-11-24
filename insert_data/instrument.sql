@@ -1,6 +1,6 @@
 INSERT INTO instrument_type (name)
 VALUES
-    ('Guittar'),
+    ('Guitar'),
     ('Flute'),
     ('Piano'),
     ('Drums'),
