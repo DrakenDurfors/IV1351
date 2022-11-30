@@ -163,20 +163,20 @@ VALUES
 
 INSERT INTO ensemble_lesson (lesson_id, max_num_students, min_num_students, genre)
 VALUES
-    (5,20,2,'Heavy Metal');
+    (5,20,2,'Heavy Metal'),
     (10,16,3,'Pop');
 
 INSERT INTO individual_lesson (lesson_id, instrument_type_id)
 VALUES
     (1, 1), --instructor 6, guitar
-    (2, 3); --instructor 6, piano
+    (2, 3), --instructor 6, piano
     (6, 5), --instructor 6, harp
     (7, 2); --instructor 13, piano
 
 INSERT INTO group_lesson (lesson_id, max_num_students, min_num_students, instrument_type_id)
 VALUES
     (3,15,2,2), --flute
-    (4,15,2,2); --flute
+    (4,15,2,2), --flute
     (8,20,3,1), --guitar
     (9,10,2,4); --drums
 
