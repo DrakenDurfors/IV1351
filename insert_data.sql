@@ -1,9 +1,15 @@
+
 INSERT INTO address (postal_code, street_name, street_number)
 VALUES
     ('11212','Grimauld Place','12'),
-    ('10010','The Burrow','1'),
-    ('14444','Privet Drive','4'),
-    ('13377','Hogwarts','77');
+    ('20010','The Burrow','1'),
+    ('34444','Privet Drive','4'),
+    ('43377','Hogwarts','77'),
+    ('55555','Patil Residence','11'),
+    ('66666','Malfoys Manor','1'),
+    ('77777','Grandmother Street','17'),
+    ('88888', 'Indian Garden', '99');
+
 
 INSERT INTO person (ssn,first_name,last_name,address_id,phone_no,email)
 VALUES
@@ -12,8 +18,16 @@ VALUES
     ('198108118888','Ginny','Weasley',2,'0737778888','badass_babe@gmail.com'),
     ('198007312222','Harry','Potter',3,'0776669999','draco_lover@yahoo.com'),
     ('194910301234','Molly','Weasley',2,'0737778888',NULL),
+
     ('193510041111','Minerva','McGonagall',4,'073777449','gogryffindor@gmail.com'),
-    ('196001096666','Severus','Snape',3,'0766666666','sectumsempra@gmail.com')
+    ('196001096666','Severus','Snape',3,'0766666666','sectumsempra@gmail.com'),
+    ('197608221111', 'Percy', 'Weasley', 2, '071234567', 'ministry_simp@hotmail.com'),
+    ('198007302222', 'Neville', 'Longbottom', 7, '0736665055', 'iforgotmypassword@yahoo.com'),
+    ('197911053333', 'Padma', 'Patil',8,'0709801532', 'bunny123@gmail.com'),
+
+    ('197911053334', 'Parvati', 'Patil', 8, '0709801327', 'bunny456@gmail.com'),
+    ('194612121212', 'Augusta', 'Longbottom', 7, NULL, 'plzsendowlinstead@confused.co.uk')
+
     ;
 
 
@@ -56,10 +70,20 @@ INSERT INTO student (person_id, contact_id)
 VALUES
     (2, 5),
     (3, 5),
-    (4,1);
+    (4, 1),
+    (8, 5),
+    (9, 12),
+    (10,6),
+    (11,6)
+    ;
 
 INSERT INTO sibling_relation (student_id_1, student_id_2)
-    VALUES (2,3);
+    VALUES
+        (2,3),
+        (2,8),
+        (3,8),
+        (10,11)
+        ;
 
 INSERT INTO instructor (person_id, ensemble_teacher)
 VALUES
