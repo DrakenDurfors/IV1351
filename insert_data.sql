@@ -26,8 +26,13 @@ VALUES
     ('197911053333', 'Padma', 'Patil',8,'0709801532', 'bunny123@gmail.com'),
 
     ('197911053334', 'Parvati', 'Patil', 8, '0709801327', 'bunny456@gmail.com'),
-    ('194612121212', 'Augusta', 'Longbottom', 7, NULL, 'plzsendowlinstead@confused.co.uk')
+    ('194612121212', 'Augusta', 'Longbottom', 7, NULL, 'plzsendowlinstead@confused.co.uk'),
 
+    ('188108261111','Albus','Dumbledore',4,'073772141','tenpointstogriffindor@gmail.com'),
+    ('196303096666','Sybill','Trelawney',3,'0766663422','yourfateissealed@gmail.com'),
+    ('197605151111', 'Pomona', 'Sprout', 2, '071231123', 'plantsarenice@plants.com'),
+    ('189003282222', 'Horace', 'Slughorn', 7, '0736669802', 'slug@yahoo.com'),
+    ('196401263333', 'Gilderoy', 'Lockhart',8,'0709804423', 'narcissus@gmail.com')
     ;
 
 
@@ -88,7 +93,12 @@ INSERT INTO sibling_relation (student_id_1, student_id_2)
 INSERT INTO instructor (person_id, ensemble_teacher)
 VALUES
     (6, 'No'),
-    (7, 'Yes');
+    (7, 'Yes'),
+    (13, 'Yes'),
+    (14, 'No'),
+    (15, 'Yes'),
+    (16, 'No'),
+    (17, 'No');
 
 INSERT INTO instructor_proficiencies (instructor_id, instrument_id)
 VALUES
@@ -97,7 +107,16 @@ VALUES
     (6, 5),
     (7, 1),
     (7, 2),
-    (7, 4);
+    (7, 4),
+    (13, 1),
+    (13, 2),
+    (13, 4),
+    (14, 3),
+    (14, 2),
+    (15, 3),
+    (15, 1),
+    (15, 5),
+    (17, 4);
 
 INSERT INTO instrument_lease (lease_start, student_id, instruments_id)
 VALUES
@@ -109,11 +128,24 @@ VALUES
 INSERT INTO schedule_time (time, date, instructor_id)
 VALUES
     ('10:00', '2022-11-30', 6),
-    ('13:00', '2022-11-30', 7),
-    ('15:00', '2022-11-30', 6),
-    ('09:00', '2022-12-01', 7),
+    ('13:00', '2022-11-30', 13),
+    ('15:00', '2022-11-30', 15),
+    ('09:00', '2022-12-01', 17),
     ('10:00', '2022-12-02', 6),
-    ('10:00', '2022-12-02', 7);
+    ('10:00', '2022-12-02', 7),
+    ('10:00', '2022-10-02', 13),
+    ('13:00', '2022-10-08', 15),
+    ('15:00', '2022-10-25', 17),
+    ('10:00', '2021-11-30', 6),
+    ('13:00', '2021-11-30', 13),
+    ('15:00', '2021-11-30', 15),
+    ('09:00', '2021-12-01', 16),
+    ('10:00', '2021-12-02', 6),
+    ('10:00', '2021-12-02', 7),
+    ('10:00', '2021-10-02', 13),
+    ('13:00', '2021-10-08', 16),
+    ('15:00', '2021-10-25', 17);
+    
 
 INSERT INTO lesson (lesson_pricing_id, place, schedule_time_id)
 VALUES
@@ -121,21 +153,32 @@ VALUES
     (1,'Ka-301', 3), --individual, beginner, instructor 6
     (4,'Ka-303', 2), --group, beginner, instructor 7
     (4,'Ka-301', 4), --group, beginner, instructor 7
-    (8,'Ka-303', 6); --ensemble, advanced, instructor 7
+    (8,'Ka-303', 6), --ensemble, advanced, instructor 7
+
+    (1,'Ka-301', 14), --individual, beginner, instructor 6
+    (1,'Ka-301', 7), --individual, beginner, instructor 13
+    (4,'Ka-303', 13), --group, beginner, instructor 16
+    (4,'Ka-301', 16), --group, beginner, instructor 13
+    (8,'Ka-303', 12); --ensemble, advanced, instructor 15
 
 INSERT INTO ensemble_lesson (lesson_id, max_num_students, min_num_students, genre)
 VALUES
     (5,20,2,'Heavy Metal');
+    (10,16,3,'Pop');
 
 INSERT INTO individual_lesson (lesson_id, instrument_type_id)
 VALUES
     (1, 1), --instructor 6, guitar
     (2, 3); --instructor 6, piano
+    (6, 5), --instructor 6, harp
+    (7, 2); --instructor 13, piano
 
 INSERT INTO group_lesson (lesson_id, max_num_students, min_num_students, instrument_type_id)
 VALUES
     (3,15,2,2), --flute
     (4,15,2,2); --flute
+    (8,20,3,1), --guitar
+    (9,10,2,4); --drums
 
 INSERT INTO booking (student_id, lesson_id, time_of_booking)
 VALUES
@@ -146,4 +189,13 @@ VALUES
     (3,4,now()),
     (4,4,now()),
     (2,5,now()),
-    (3,5,now());
+    (3,5,now()),
+
+    (2,6,now()),
+    (3,7,now()),
+    (3,8,now()),
+    (4,8,now()),
+    (3,9,now()),
+    (4,9,now()),
+    (2,10,now()),
+    (3,10,now());

@@ -19,5 +19,6 @@ SELECT instructor_lesson.person_id,
     (SELECT * FROM schedule_time 
     WHERE DATE_PART('month', instructor_lesson.date) = DATE_PART('month', CURRENT_DATE)
     AND DATE_PART('year', instructor_lesson.date) = DATE_PART('year', CURRENT_DATE))
+    AND COUNT(instructor_lesson.person_id) >= 3
 
     ORDER BY Name;
