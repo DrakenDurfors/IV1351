@@ -78,7 +78,12 @@ VALUES
     ;
 
 INSERT INTO sibling_relation (student_id_1, student_id_2)
-    VALUES (2,3);
+    VALUES
+        (2,3),
+        (2,8),
+        (3,8),
+        (10,11)
+        ;
 
 INSERT INTO instructor (person_id, ensemble_teacher)
 VALUES
