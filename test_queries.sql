@@ -45,5 +45,3 @@ GROUP BY student.person_id
 ORDER BY student.person_id
 ;
 
-select *
-from student full join person on student.person_id = person.id
