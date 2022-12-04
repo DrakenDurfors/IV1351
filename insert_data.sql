@@ -27,12 +27,12 @@ VALUES
 
     ('197911053334', 'Parvati', 'Patil', 8, '0709801327', 'bunny456@gmail.com'),
     ('194612121212', 'Augusta', 'Longbottom', 7, NULL, 'plzsendowlinstead@confused.co.uk'),
-
     ('188108261111','Albus','Dumbledore',4,'073772141','tenpointstogriffindor@gmail.com'),
-    ('196303096666','Sybill','Trelawney',3,'0766663422','yourfateissealed@gmail.com'),
-    ('197605151111', 'Pomona', 'Sprout', 2, '071231123', 'plantsarenice@plants.com'),
+    ('196303096666','Sybill','Trelawney',4,'0766663422','yourfateissealed@gmail.com'),
+    ('197605151111', 'Pomona', 'Sprout', 4, '071231123', 'plantsarenice@plants.com'),
+
     ('189003282222', 'Horace', 'Slughorn', 7, '0736669802', 'slug@yahoo.com'),
-    ('196401263333', 'Gilderoy', 'Lockhart',8,'0709804423', 'narcissus@gmail.com')
+    ('196401263333', 'Gilderoy', 'Lockhart',4,'0709804423', 'narcissus@gmail.com')
     ;
 
 
@@ -93,10 +93,10 @@ INSERT INTO sibling_relation (student_id_1, student_id_2)
 INSERT INTO instructor (person_id, ensemble_teacher)
 VALUES
     (6, 'No'),
-    (7, 'Yes'),
-    (13, 'Yes'),
+    (7, 'Yes'),     --Snape
+    (13, 'Yes'),    --Dumbledore
     (14, 'No'),
-    (15, 'Yes'),
+    (15, 'Yes'),    --Sprout
     (16, 'No'),
     (17, 'No');
 
@@ -132,19 +132,32 @@ VALUES
     ('15:00', '2022-11-30', 15),
     ('09:00', '2022-12-01', 17),
     ('10:00', '2022-12-02', 6),
+
     ('10:00', '2022-12-02', 7),
     ('10:00', '2022-10-02', 13),
     ('13:00', '2022-10-08', 15),
     ('15:00', '2022-10-25', 17),
     ('10:00', '2021-11-30', 6),
+
     ('13:00', '2021-11-30', 13),
     ('15:00', '2021-11-30', 15),
     ('09:00', '2021-12-01', 16),
     ('10:00', '2021-12-02', 6),
     ('10:00', '2021-12-02', 7),
+
     ('10:00', '2021-10-02', 13),
     ('13:00', '2021-10-08', 16),
-    ('15:00', '2021-10-25', 17);
+    ('15:00', '2021-10-25', 17),
+    ('10:00', '2022-12-08', 13),
+    ('12:00', '2022-12-08', 13),
+
+    ('12:00', '2022-12-09', 13),
+    ('16:00', '2022-12-12', 13),
+    ('10:00', '2022-12-13', 15),
+    ('12:00', '2022-12-13', 15),
+    ('12:00', '2022-12-15', 15),
+    ('16:00', '2022-12-15', 15)
+    ;
     
 
 INSERT INTO lesson (lesson_pricing_id, place, schedule_time_id)
@@ -153,18 +166,23 @@ VALUES
     (1,'Ka-301', 3), --individual, beginner, instructor 6
     (4,'Ka-303', 2), --group, beginner, instructor 7
     (4,'Ka-301', 4), --group, beginner, instructor 7
-    (8,'Ka-303', 6), --ensemble, advanced, instructor 7
+    (8,'Ka-303', 6), --ensemble, intermediate, instructor 7
 
     (1,'Ka-301', 14), --individual, beginner, instructor 6
     (1,'Ka-301', 7), --individual, beginner, instructor 13
     (4,'Ka-303', 13), --group, beginner, instructor 16
     (4,'Ka-301', 16), --group, beginner, instructor 13
-    (8,'Ka-303', 12); --ensemble, advanced, instructor 15
+    (8,'Ka-303', 12), --ensemble, intermediate, instructor 15
 
-INSERT INTO ensemble_lesson (lesson_id, max_num_students, min_num_students, genre)
-VALUES
-    (5,20,2,'Heavy Metal'),
-    (10,16,3,'Pop');
+    (7, 'The Great Hall', 19),  --instr13
+    (9, 'Ka-208', 20),          --instr13
+    (7, 'The Great Hall', 21),  --instr13
+    (9, 'Ka-205', 22),          --instr13
+    (7, 'The Great Hall', 23),  --instr15
+    (9, 'Ka-208', 24), --instr15
+    (8, 'Ka-301', 25), --instr15
+    (8, 'Ka-301', 26)  --instr15
+;
 
 INSERT INTO individual_lesson (lesson_id, instrument_type_id)
 VALUES
@@ -180,6 +198,21 @@ VALUES
     (8,20,3,1), --guitar
     (9,10,2,4); --drums
 
+
+INSERT INTO ensemble_lesson (lesson_id, max_num_students, min_num_students, genre)
+VALUES
+    (5,20,2,'Heavy Metal'),
+    (10,16,3,'Pop'),
+    (11, 2, 1, 'Punk'),
+    (12, 2, 1, 'Rock'),
+    (13, 1, 1, 'Jazz'),
+    (14, 10, 1, 'Ghost'),
+    (15, 1, 1, 'Choir'),
+    (16, 10, 1, 'Ghost'),
+    (17, 1, 1, 'Choir'),
+    (18, 2, 1, 'Rock')
+    ;
+
 INSERT INTO booking (student_id, lesson_id, time_of_booking)
 VALUES
     (2,1,now()),
@@ -187,15 +220,21 @@ VALUES
     (3,3,now()),
     (4,3,now()),
     (3,4,now()),
+
     (4,4,now()),
     (2,5,now()),
     (3,5,now()),
-
     (2,6,now()),
     (3,7,now()),
+
     (3,8,now()),
     (4,8,now()),
     (3,9,now()),
     (4,9,now()),
     (2,10,now()),
-    (3,10,now());
+    (3,10,now()),
+
+    (11, 13, now()),
+    (9, 15, now()),
+    (10, 17,now())
+    ;
