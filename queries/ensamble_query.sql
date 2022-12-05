@@ -1,4 +1,7 @@
-SELECT 
+
+
+EXPLAIN ANALYZE
+SELECT
     TO_CHAR(date(ensembles.date), 'Dy') AS Day, 
     ensembles.genre,
     CASE 
