@@ -77,6 +77,7 @@ ALTER TABLE instructor_proficiencies ADD CONSTRAINT PK_instructor_proficiencies 
 CREATE TABLE instrument_lease (
  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
  lease_start DATE NOT NULL,
+ lease_end DATE,
  student_id INT NOT NULL,
  instruments_id INT NOT NULL
 );
