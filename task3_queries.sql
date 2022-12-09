@@ -23,7 +23,7 @@ SELECT TO_CHAR(TO_DATE(DATE_PART('month', a.date)::text, 'MM'), 'mon') AS month,
 FROM ((lesson LEFT JOIN schedule_time ON schedule_time.id = lesson.schedule_time_id)
     LEFT JOIN lesson_pricing ON lesson_pricing.id = lesson.lesson_pricing_id) AS a
 GROUP BY DATE_PART('year', a.date), DATE_PART('month', a.date)
-HAVING DATE_PART('year', a.date) = '2022'
+HAVING DATE_PART('year', a.date) = '2022'   --this year can be changed
 ;
 
 /*Show how many students there are with no sibling, with one sibling, with two siblings, etc.
