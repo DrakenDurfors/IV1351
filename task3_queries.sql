@@ -36,7 +36,7 @@ EXPLAIN ANALYZE
 SELECT No_Of_Siblings, COUNT(*) AS No_Of_Students
 FROM (SELECT student.person_id, COALESCE(sibling_table.No_Of_Siblings, 0) AS No_Of_Siblings
       FROM student
-               FULL JOIN
+               LEFT JOIN
            (SELECT student.person_id, COUNT(*) AS No_Of_Siblings
             FROM student,
                  sibling_relation
