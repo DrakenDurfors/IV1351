@@ -57,13 +57,19 @@ public class BlockInterpreter {
                         keepReceivingCmds = false;
                         break;
                     case LIST:
-                        // TODO: handle List all rentable command
+                        List</*Dont know what type this should be yet*/> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
+                        /*
+                        for(instrument : instruments){
+                            System.out.println(instrumentID, brand, price);
+                        } 
+                         */
+                        
                         break;
                     case RENT:
-                        // TODO: handle rent instrument command
+                        ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));
                         break;
                     case TERMINATE:
-                        // TODO: handle terminate rental command
+                        ctrl.terminateRental(cmdLine.getParameter(0), cmdLine.getParameter(1));
                         break;
                 
                     default:
