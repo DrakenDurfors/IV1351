@@ -3,10 +3,13 @@ package controller;
 import integration.SchoolDAO;
 import integration.SchoolDBException;
 
+import model.Instrument;
 import model.InstrumentException;
 import model.Instrument;
 
-public class Controller {
+import java.util.List;
+
+public class  Controller {
     private final SchoolDAO schoolDB;
 
     public Controller() throws SchoolDBException {
@@ -53,7 +56,7 @@ public class Controller {
     public void terminateRental(String instrumentID, String studentID) throws InstrumentException {
         String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '" + studentID + "'.";
         try {
-            return schoolDB.terminateRental(instrumentID, studentID);
+//            return schoolDB.terminateRental(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }

@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import controller.Controller;
 import model.Instrument;
-import model.School;
 
 /**
  * Reads and interprets user commands. This command interpreter is blocking, the
