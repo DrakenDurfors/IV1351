@@ -3,5 +3,8 @@
   The listing shall show brand and price for each listed instrument.
  */
 
+/*- hyra ut ett instrumment (skapa rad i databasen)
+- avsluta uthyrningen (uppdatera rad i databasen)*/
 
-SELECT
+INSERT INTO instrument_lease (lease_start, lease_end, student_id, instruments_id)
+VALUES (now(), null, 3, 3)

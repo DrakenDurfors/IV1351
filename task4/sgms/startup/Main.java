@@ -10,6 +10,7 @@ public class Main{
             new BlockInterpreter(new Controller()).handleCmds();
         } catch (Exception e) {
             // TODO: handle exception
+
         }
     }
 
