@@ -86,7 +86,7 @@ public class BlockInterpreter {
     }
 
     private String readNextLine() {
-        System.out.println(PROMPT);
+        System.out.print(PROMPT);
         return console.nextLine();
     }
 
