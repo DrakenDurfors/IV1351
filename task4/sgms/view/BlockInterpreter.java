@@ -23,7 +23,7 @@ public class BlockInterpreter {
      * 
      * @param ctrl The controller used by this instance.
      */
-    public void BlockingInterpreter(Controller ctrl) {
+    public BlockInterpreter(Controller ctrl) {
         this.ctrl = ctrl;
     }
 
