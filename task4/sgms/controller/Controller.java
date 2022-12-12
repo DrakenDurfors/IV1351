@@ -4,6 +4,7 @@ import integration.SchoolDAO;
 import integration.SchoolDBException;
 
 import model.InstrumentException;
+import model.Instrument;
 
 public class Controller {
     private final SchoolDAO schoolDB;
@@ -17,7 +18,7 @@ public class Controller {
      * @return A list containing instruments
      * @throws InstrumentException if unable to get instruments
      */
-    public List</* Not sure what type */> getRentableInstruments(String type) throws InstrumentException {
+    public List<Instrument> getRentableInstruments(String type) throws InstrumentException {
         String failMsg = "Unable to list rentable instruments.";
         try {
             return schoolDB.findRentableInstrumentsOfType(type);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.Controller;
+import model.Instrument;
 import model.School;
 
 /**
@@ -57,7 +58,7 @@ public class BlockInterpreter {
                         keepReceivingCmds = false;
                         break;
                     case LIST:
-                        List</*Dont know what type this should be yet*/> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
+                        List<Instrument> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
                         /*
                         for(instrument : instruments){
                             System.out.println(instrumentID, brand, price);
