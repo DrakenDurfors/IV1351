@@ -63,13 +63,15 @@ public class BlockInterpreter {
                             System.out.println(instrumentID, brand, price);
                         } 
                          */
-                        
+                        System.out.println("You found a list of instruments!");
                         break;
                     case RENT:
                         ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));
+                        System.out.println("You rented instrument: " + cmdLine.getParameter(0) + " to: " + cmdLine.getParameter(1));
                         break;
                     case TERMINATE:
                         ctrl.terminateRental(cmdLine.getParameter(0), cmdLine.getParameter(1));
+                        System.out.println("You terminated the rental of instrument: " + cmdLine.getParameter(0) + " to: " + cmdLine.getParameter(1));
                         break;
                 
                     default:

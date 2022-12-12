@@ -10,8 +10,25 @@ import java.util.List;
 public class SchoolDAO {
     private Connection connection;
 
+    public SchoolDAO() throws SchoolDBException{
+        try {
+            connectToDB();
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
     private void connectToDB() throws ClassNotFoundException, SQLException{
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood", "postgres", "admin"); 
+            connection.setAutoCommit(false);
+            System.out.println("Connection established");
+        } catch (SQLException e) {
+            // TODO: handle exception properly
+            System.out.println("DEAD CONNECTION");
+            e.printStackTrace();
+        }
+        
     }
 
     public List<Instrument> findRentableInstrumentsOfType(String type) {
