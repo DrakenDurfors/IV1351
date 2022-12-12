@@ -5,7 +5,6 @@ import integration.SchoolDBException;
 
 import model.Instrument;
 import model.InstrumentException;
-import model.Instrument;
 
 import java.util.List;
 
