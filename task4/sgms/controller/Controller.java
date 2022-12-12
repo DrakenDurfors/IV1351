@@ -3,9 +3,12 @@ package controller;
 import integration.SchoolDAO;
 import integration.SchoolDBException;
 
+import model.Instrument;
 import model.InstrumentException;
 
-public class Controller {
+import java.util.List;
+
+public class  Controller {
     private final SchoolDAO schoolDB;
 
     public Controller() throws SchoolDBException {
@@ -17,7 +20,7 @@ public class Controller {
      * @return A list containing instruments
      * @throws InstrumentException if unable to get instruments
      */
-    public List</* Not sure what type */> getRentableInstruments(String type) throws InstrumentException {
+    public List<Instrument> getRentableInstruments(String type) throws InstrumentException {
         String failMsg = "Unable to list rentable instruments.";
         try {
             return schoolDB.findRentableInstrumentsOfType(type);
@@ -52,7 +55,7 @@ public class Controller {
     public void terminateRental(String instrumentID, String studentID) throws InstrumentException {
         String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '" + studentID + "'.";
         try {
-            return schoolDB.terminateRental(instrumentID, studentID);
+//            return schoolDB.terminateRental(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }

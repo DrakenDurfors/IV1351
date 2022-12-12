@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.Controller;
-import model.School;
+import model.Instrument;
 
 /**
  * Reads and interprets user commands. This command interpreter is blocking, the
@@ -57,7 +57,7 @@ public class BlockInterpreter {
                         keepReceivingCmds = false;
                         break;
                     case LIST:
-                        List</*Dont know what type this should be yet*/> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
+                        List<Instrument> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
                         /*
                         for(instrument : instruments){
                             System.out.println(instrumentID, brand, price);
