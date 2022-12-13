@@ -21,7 +21,10 @@ public class SchoolDAO {
     private PreparedStatement checkActiveLeaseStmt;
     private PreparedStatement checkActiveRentalStmt;
 
-
+    /**
+     * Constructs the Database Access Object by connecting to the database and preparing the sql-statements.
+     * @throws SchoolDBException
+     */
     public SchoolDAO() throws SchoolDBException{
         try {
             connectToDB();
@@ -31,6 +34,11 @@ public class SchoolDAO {
         }
     }
 
+    /**
+     * Connects to the soundgood database and sets auto - commit to false.
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     private void connectToDB() throws ClassNotFoundException, SQLException{
         try {
             //connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
@@ -45,6 +53,13 @@ public class SchoolDAO {
         
     }
 
+    /**
+     * Finds all available instruments in the database of a certain type.
+     * @param type Specifies the type of instruments to search for.
+     * @return A list of the Instrument objects found by the query.
+     * @throws SQLException
+     * 
+     */
     public List<Instrument> findRentableInstrumentsOfType(String type) throws SQLException {
         String failMsg = "Could not fetch instruments";
         List<Instrument> instruments = new ArrayList<>();
@@ -64,6 +79,12 @@ public class SchoolDAO {
         return instruments;
     }
 
+    /**
+     * Creates a new database entry for the rental of a specified instrument to a student.
+     * @param instrumentID Specifies the Id of the instrument to be rented.
+     * @param studentID Specifies the Id of the student the instrument should be rented to.
+     * @throws SQLException
+     */
     public void rentInstrument(String instrumentID, String studentID) throws SQLException {
         String failMsg = "Could not rent instrument";
         int affectedRows = 0;
@@ -112,10 +133,14 @@ public class SchoolDAO {
             // TODO: handle exception
         }
         
-        
-
     }
 
+    /**
+     * Terminates a rental of an instrument by updating the lease end date to the current date.
+     * @param instrumentID Specifies the id of the instrument
+     * @param studentID Specifies the id of the student
+     * @throws SQLException
+     */
     public void terminateRental(String instrumentID, String studentID) throws SQLException {
         String failMsg = "Could not terminate rental";
         int affectedRows = 0;
@@ -135,6 +160,10 @@ public class SchoolDAO {
         }
     }
 
+    /**
+     * Initialises the prepared sql-statements.
+     * @throws SQLException
+     */
     private void prepareStatements() throws SQLException {
 
         checkActiveRentalStmt = connection.prepareStatement(
