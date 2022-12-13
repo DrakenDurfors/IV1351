@@ -58,12 +58,9 @@ public class BlockInterpreter {
                         break;
                     case LIST:
                         List<Instrument> instruments = ctrl.getRentableInstruments(cmdLine.getParameter(0));
-                        /*
-                        for(instrument : instruments){
-                            System.out.println(instrumentID, brand, price);
+                        for(Instrument instrument  : instruments){
+                            System.out.println(instrument.getId() + " | " + instrument.getBrand() + ", " + instrument.getFee());
                         } 
-                         */
-                        System.out.println("You found a list of instruments!");
                         break;
                     case RENT:
                         ctrl.rentInstrument(cmdLine.getParameter(0), cmdLine.getParameter(1));

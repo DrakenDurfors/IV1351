@@ -55,7 +55,7 @@ public class  Controller {
     public void terminateRental(String instrumentID, String studentID) throws InstrumentException {
         String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '" + studentID + "'.";
         try {
-//            return schoolDB.terminateRental(instrumentID, studentID);
+           schoolDB.terminateRental(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }
