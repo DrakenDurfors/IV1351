@@ -90,8 +90,8 @@ public class SchoolDAO {
             checkActiveRentalStmt.setInt(1, instrumentToRentID);
 
             currentAvailable = checkActiveRentalStmt.executeQuery();
-            if(currentRentals.next()){
-                if(currentRentals.getInt(1) >= 1){
+            if(currentAvailable.next()){
+                if(currentAvailable.getInt(1) >= 1){
                     // TODO: handle exception properly
                     throw new SQLException(failMsg);
                 }
