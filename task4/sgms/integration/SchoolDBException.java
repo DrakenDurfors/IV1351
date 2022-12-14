@@ -3,7 +3,12 @@ package integration;
 /**
  * SchoolDBException
  */
-public class SchoolDBException extends Exception{
+public class SchoolDBException extends Exception {
+    public SchoolDBException(String reason) {
+        super(reason);
+    }
 
-    
+    public SchoolDBException(String reason, Throwable rootCause) {
+        super(reason, rootCause);
+    }
 }

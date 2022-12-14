@@ -22,7 +22,8 @@ public class SchoolDAO {
     private PreparedStatement checkActiveRentalStmt;
 
     /**
-     * Constructs the Database Access Object by connecting to the database and preparing the sql-statements.     *
+     * Constructs the Database Access Object by connecting to the database and
+     * preparing the sql-statements. *
      *
      * @throws SchoolDBException
      */
@@ -30,9 +31,8 @@ public class SchoolDAO {
         try {
             connectToDB();
             prepareStatements();
-        } catch (Exception e) {
-            // TODO: handle exception
-            throw new SchoolDBException();
+        } catch (ClassNotFoundException | SQLException exception) {
+            throw new SchoolDBException("Could not connect. ", exception);
         }
     }
 
@@ -43,16 +43,12 @@ public class SchoolDAO {
      * @throws SQLException
      */
     private void connectToDB() throws ClassNotFoundException, SQLException {
-        try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-            //connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood", "postgres", "Ladrin123");
-            connection.setAutoCommit(false);
-            System.out.println("Connection established");
-        } catch (SQLException e) {
-            // TODO: handle exception properly
-            System.out.println("DEAD CONNECTION");
-            e.printStackTrace();
-        }
+
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+        // connection =
+        // DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
+        // "postgres", "Ladrin123");
+        connection.setAutoCommit(false);
 
     }
 
@@ -63,7 +59,7 @@ public class SchoolDAO {
      * @return A list of the Instrument objects found by the query.
      * @throws SQLException
      */
-    public List<Instrument> findRentableInstrumentsOfType(String type) throws SQLException {
+    public List<Instrument> findRentableInstrumentsOfType(String type) throws SchoolDBException {
         String failMsg = "Could not fetch instruments";
         List<Instrument> instruments = new ArrayList<>();
         ResultSet result = null;
@@ -75,20 +71,23 @@ public class SchoolDAO {
             }
             connection.commit();
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(failMsg);
+            exceptionHandler(failMsg, e);
+        } finally {
+            closeResult(result, failMsg);
         }
         return instruments;
     }
 
     /**
-     * Creates a new database entry for the rental of a specified instrument to a student.
+     * Creates a new database entry for the rental of a specified instrument to a
+     * student.
      *
      * @param instrumentID Specifies the Id of the instrument to be rented.
-     * @param studentID    Specifies the Id of the student the instrument should be rented to.
+     * @param studentID    Specifies the Id of the student the instrument should be
+     *                     rented to.
      * @throws SQLException
      */
-    public void rentInstrument(String instrumentID, String studentID) throws SQLException {
+    public void rentInstrument(String instrumentID, String studentID) throws SchoolDBException {
         String failMsg = "Could not rent instrument";
         int affectedRows = 0;
         ResultSet currentRentals = null;
@@ -97,15 +96,14 @@ public class SchoolDAO {
             int studentToRentID = Integer.parseInt(studentID);
             int instrumentToRentID = Integer.parseInt(instrumentID);
 
-            // Following checks that student doesnt have more than 
+            // Following checks that student doesnt have more than
             checkActiveLeaseStmt.setInt(1, studentToRentID);
 
             currentRentals = checkActiveLeaseStmt.executeQuery();
 
             if (currentRentals.next()) {
                 if (currentRentals.getInt(1) >= MAX_RENTALS) {
-                    // TODO: handle exception properly
-                    throw new SQLException(failMsg);
+                    exceptionHandler(failMsg, null);
                 }
             }
 
@@ -116,37 +114,39 @@ public class SchoolDAO {
             currentAvailable = checkActiveRentalStmt.executeQuery();
             if (currentAvailable.next()) {
                 if (currentAvailable.getInt(1) >= 1) {
-                    // TODO: handle exception properly
-                    throw new SQLException(failMsg);
+                    exceptionHandler(failMsg, null);
                 }
             }
 
-            //rents the instrument
+            // rents the instrument
             startLeaseStmt.setInt(1, studentToRentID);
             startLeaseStmt.setInt(2, instrumentToRentID);
 
             affectedRows = startLeaseStmt.executeUpdate();
             if (affectedRows != 1) {
-                // TODO: handle exception properly
-                throw new SQLException(failMsg);
+                exceptionHandler(failMsg, null);
             }
             connection.commit();
 
         } catch (Exception e) {
-            // TODO: handle exception
+            exceptionHandler(failMsg, e);
+        }  finally {
+            closeResult(currentRentals, failMsg);
+            closeResult(currentAvailable, failMsg);
         }
 
     }
 
     /**
-     * Terminates a rental of an instrument by updating the lease end date to the current date.
+     * Terminates a rental of an instrument by updating the lease end date to the
+     * current date.
      *
      * @param instrumentID Specifies the id of the instrument
      * @param studentID    Specifies the id of the student
      * @throws SQLException
      */
-    public void terminateRental(String instrumentID, String studentID) throws SQLException {
-        String failMsg = "Could not terminate rental";      // TODO: this error message prints even when termination works
+    public void terminateRental(String instrumentID, String studentID) throws SchoolDBException {
+        String failMsg = "Could not terminate rental"; // TODO: this error message prints even when termination works
         int affectedRows = 0;
         try {
             terminateLeaseStmt.setInt(1, Integer.parseInt(studentID));
@@ -154,13 +154,11 @@ public class SchoolDAO {
 
             affectedRows = terminateLeaseStmt.executeUpdate();
             if (affectedRows != 1) {
-                // TODO: handle exception properly
-                throw new SQLException(failMsg);
+                exceptionHandler(failMsg, null);
             }
             connection.commit();
         } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(failMsg);
+            exceptionHandler(failMsg, e);
         }
     }
 
@@ -172,12 +170,10 @@ public class SchoolDAO {
     private void prepareStatements() throws SQLException {
 
         checkActiveRentalStmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL"
-        );
+                "SELECT COUNT(*) FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL");
 
         checkActiveLeaseStmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL"
-        );
+                "SELECT COUNT(*) FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL");
 
         startLeaseStmt = connection.prepareStatement(
                 "INSERT INTO instrument_lease (lease_start, lease_end, student_id, instruments_id) " +
@@ -193,7 +189,29 @@ public class SchoolDAO {
 
         terminateLeaseStmt = connection.prepareStatement(
                 "UPDATE instrument_lease SET lease_end = NOW() " +
-                        "WHERE student_id = ? AND instruments_id = ? AND lease_end IS NULL"
-        );
+                        "WHERE student_id = ? AND instruments_id = ? AND lease_end IS NULL");
+    }
+
+    private void exceptionHandler(String failMsg, Exception causeOfFail) throws SchoolDBException {
+        try {
+            connection.rollback();
+        } catch (SQLException e) {
+            failMsg += ". Failed to rollback: " + e.getMessage();
+        }
+
+        if (causeOfFail != null) {
+            throw new SchoolDBException(failMsg, causeOfFail);
+        } else {
+            throw new SchoolDBException(failMsg);
+
+        }
+    }
+
+    private void closeResult(ResultSet result, String failMsg) throws SchoolDBException {
+        try {
+            result.close();
+        } catch (Exception e) {
+            throw new SchoolDBException(failMsg + ". Could not close stmt: ", e);
+        }
     }
 }
