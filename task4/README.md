@@ -1,3 +1,10 @@
+# SoundGood Music School 
+Coursework for KTH course IV1351 Data Storage Paradigms 
+
+By Albin Durfors and Tove Verner-Carlsson
+
+## Instrument Rental Application 
+
 **Navigating the SoundGood Music School Instrument Rental System**
 
 Type 'help' to list all available commands. These are
@@ -12,4 +19,3 @@ if trying to terminate a nonexistent lease, an exception is thrown.
 help: list the available commands
 
 quit: quit the application
-

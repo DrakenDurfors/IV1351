@@ -8,6 +8,9 @@ import model.InstrumentException;
 
 import java.util.List;
 
+/**
+ * Handles communication between the view, model, and integration layers.
+ */
 public class Controller {
     private final SchoolDAO schoolDB;
     private final int MAX_RENTALS = 2;

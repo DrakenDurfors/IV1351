@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * An instance of this class represents a specific instrument object and its attributes.
+ */
 public class Instrument {
     String id;
     String brand;

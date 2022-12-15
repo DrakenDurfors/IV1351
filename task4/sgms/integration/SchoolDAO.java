@@ -10,6 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class constitutes the integration layer, and is a Database Access Object.
+ * We connect to the database, prepare SQL statements, and tell the database to run
+ * these statements when so prompted.
+ */
 public class SchoolDAO {
     private Connection connection;
 
@@ -42,10 +47,10 @@ public class SchoolDAO {
      */
     private void connectToDB() throws ClassNotFoundException, SQLException {
 
-        // connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-        connection =
-        DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood","postgres",
-        "Ladrin123");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+        //connection =
+        //DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood","postgres",
+        //"Ladrin123");
         connection.setAutoCommit(false);
     }
 
