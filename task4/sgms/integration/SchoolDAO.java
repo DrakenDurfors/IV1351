@@ -139,7 +139,7 @@ public class SchoolDAO {
     /**
      * Creates a new database entry for the rental of a specified instrument to a
      * student.
-     *
+     * TODO this method  does more than one sql statement and should probably use transaction locks?
      * @param instrumentID Specifies the Id of the instrument to be rented.
      * @param studentID    Specifies the Id of the student the instrument should be
      *                     rented to.
