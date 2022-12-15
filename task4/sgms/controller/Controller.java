@@ -45,16 +45,16 @@ public class Controller {
             throw new InstrumentException(failMsg);
         }
         try {
-            int rentals = schoolDB.checkRentals(studentID);
-            if (rentals >= MAX_RENTALS) {
+            int studentRentals = schoolDB.findNumberOfActiveLeasesForStudent(studentID);
+            if (studentRentals >= MAX_RENTALS) {
                 throw new InstrumentException(failMsg);
             }
-            boolean rentable = schoolDB.checkIfRentable(instrumentID);
-            if (rentable == false) {
+            int instrumentRentals = schoolDB.findNumberOfActiveLeasesForInstrument(instrumentID);
+            if (instrumentRentals != 0) {
                 throw new InstrumentException(failMsg);
             }
 
-            schoolDB.rentInstrument(instrumentID, studentID);
+            schoolDB.createInstrumentLease(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }
@@ -71,7 +71,7 @@ public class Controller {
         String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '"
                 + studentID + "'.";
         try {
-            schoolDB.terminateRental(instrumentID, studentID);
+            schoolDB.updateInstrumentLeaseAsTerminated(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }
