@@ -1,5 +1,9 @@
 package view;
 
+/**
+ * Class handling one line of user input. One input line will consist of a command followed by
+ * associated parameters (if applicable). Parsing, trimming and interpreting the user input.
+ */
 public class CmdLine {
     private static final String PARAM_DELIMETER = " ";
     private String[] params;

@@ -13,7 +13,6 @@ import java.util.List;
 public class SchoolDAO {
     private Connection connection;
 
-
     private PreparedStatement listAvailableStmt;
     private PreparedStatement startLeaseStmt;
     private PreparedStatement terminateLeaseStmt;
@@ -43,12 +42,9 @@ public class SchoolDAO {
      */
     private void connectToDB() throws ClassNotFoundException, SQLException {
 
-        // connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-        connection =
-        DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-        "postgres", "Ladrin123");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+//        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood","postgres", "Ladrin123");
         connection.setAutoCommit(false);
-
     }
 
     /**
@@ -56,7 +52,7 @@ public class SchoolDAO {
      *
      * @param type Specifies the type of instruments to search for.
      * @return A list of the Instrument objects found by the query.
-     * @throws SQLException
+     * @throws SchoolDBException
      */
     public List<Instrument> findRentableInstrumentsOfType(String type) throws SchoolDBException {
         String failMsg = "Could not fetch instruments";
@@ -79,6 +75,7 @@ public class SchoolDAO {
 
     /**
      * Checks how many rentals a student has
+     *
      * @param studentID The id of the student
      * @return The amount of rentals that student currently has
      * @throws SchoolDBException
@@ -100,7 +97,7 @@ public class SchoolDAO {
             connection.commit();
         } catch (Exception e) {
             exceptionHandler(failMsg, e);
-        }   finally {
+        } finally {
             closeResult(resultSet, failMsg);
         }
         return result;
@@ -108,7 +105,8 @@ public class SchoolDAO {
 
     /**
      * Checks if an instrument is allready rented
-     * @param instrumentID The id of the instrument to check
+     *
+     * @param instrumentID The ID of the instrument to check
      * @return True if instrument is available, false if it is not
      * @throws SchoolDBException
      */
@@ -117,8 +115,7 @@ public class SchoolDAO {
         ResultSet resultSet = null;
         boolean result = false;
         try {
-            // Following checks that instrument isn't allready rented
-
+            // Following checks that instrument isn't already rented
             checkActiveRentalStmt.setInt(1, Integer.parseInt(instrumentID));
 
             resultSet = checkActiveRentalStmt.executeQuery();
@@ -139,11 +136,10 @@ public class SchoolDAO {
     /**
      * Creates a new database entry for the rental of a specified instrument to a
      * student.
-     * TODO this method  does more than one sql statement and should probably use transaction locks?
-     * @param instrumentID Specifies the Id of the instrument to be rented.
-     * @param studentID    Specifies the Id of the student the instrument should be
-     *                     rented to.
-     * @throws SQLException
+     *
+     * @param instrumentID Specifies the ID of the instrument to be rented.
+     * @param studentID    Specifies the ID of the student the instrument should be rented to.
+     * @throws SchoolDBException
      */
     public void rentInstrument(String instrumentID, String studentID) throws SchoolDBException {
         String failMsg = "Could not rent instrument";
@@ -151,7 +147,6 @@ public class SchoolDAO {
         try {
             int studentToRentID = Integer.parseInt(studentID);
             int instrumentToRentID = Integer.parseInt(instrumentID);
-            
 
             // rents the instrument
             startLeaseStmt.setInt(1, studentToRentID);
@@ -166,7 +161,6 @@ public class SchoolDAO {
         } catch (Exception e) {
             exceptionHandler(failMsg, e);
         }
-
     }
 
     /**
