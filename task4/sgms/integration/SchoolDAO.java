@@ -13,7 +13,6 @@ import java.util.List;
 public class SchoolDAO {
     private Connection connection;
 
-    private final int MAX_RENTALS = 2;
 
     private PreparedStatement listAvailableStmt;
     private PreparedStatement startLeaseStmt;
@@ -44,10 +43,10 @@ public class SchoolDAO {
      */
     private void connectToDB() throws ClassNotFoundException, SQLException {
 
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-        // connection =
-        // DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
-        // "postgres", "Ladrin123");
+        // connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+        connection =
+        DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood",
+        "postgres", "Ladrin123");
         connection.setAutoCommit(false);
 
     }
@@ -79,6 +78,65 @@ public class SchoolDAO {
     }
 
     /**
+     * Checks how many rentals a student has
+     * @param studentID The id of the student
+     * @return The amount of rentals that student currently has
+     * @throws SchoolDBException
+     */
+    public int checkRentals(String studentID) throws SchoolDBException {
+        String failMsg = "Could not fetch student rentals";
+        ResultSet resultSet = null;
+        int result = 0;
+        try {
+            checkActiveLeaseStmt.setInt(1, Integer.parseInt(studentID));
+
+            resultSet = checkActiveLeaseStmt.executeQuery();
+
+            if (resultSet.next()) {
+                result = resultSet.getInt(1);
+            } else {
+                exceptionHandler(failMsg, null);
+            }
+            connection.commit();
+        } catch (Exception e) {
+            exceptionHandler(failMsg, e);
+        }   finally {
+            closeResult(resultSet, failMsg);
+        }
+        return result;
+    }
+
+    /**
+     * Checks if an instrument is allready rented
+     * @param instrumentID The id of the instrument to check
+     * @return True if instrument is available, false if it is not
+     * @throws SchoolDBException
+     */
+    public boolean checkIfRentable(String instrumentID) throws SchoolDBException {
+        String failMsg = "Could not check instrument";
+        ResultSet resultSet = null;
+        boolean result = false;
+        try {
+            // Following checks that instrument isn't allready rented
+
+            checkActiveRentalStmt.setInt(1, Integer.parseInt(instrumentID));
+
+            resultSet = checkActiveRentalStmt.executeQuery();
+            if (resultSet.next()) {
+                if (resultSet.getInt(1) == 0) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            exceptionHandler(failMsg, e);
+        } finally {
+            closeResult(resultSet, failMsg);
+        }
+        return result;
+    }
+
+
+    /**
      * Creates a new database entry for the rental of a specified instrument to a
      * student.
      *
@@ -90,33 +148,10 @@ public class SchoolDAO {
     public void rentInstrument(String instrumentID, String studentID) throws SchoolDBException {
         String failMsg = "Could not rent instrument";
         int affectedRows = 0;
-        ResultSet currentRentals = null;
-        ResultSet currentAvailable = null;
         try {
             int studentToRentID = Integer.parseInt(studentID);
             int instrumentToRentID = Integer.parseInt(instrumentID);
-
-            // Following checks that student doesnt have more than
-            checkActiveLeaseStmt.setInt(1, studentToRentID);
-
-            currentRentals = checkActiveLeaseStmt.executeQuery();
-
-            if (currentRentals.next()) {
-                if (currentRentals.getInt(1) >= MAX_RENTALS) {
-                    exceptionHandler(failMsg, null);
-                }
-            }
-
-            // Following checks that instrument isn't allready rented
-
-            checkActiveRentalStmt.setInt(1, instrumentToRentID);
-
-            currentAvailable = checkActiveRentalStmt.executeQuery();
-            if (currentAvailable.next()) {
-                if (currentAvailable.getInt(1) >= 1) {
-                    exceptionHandler(failMsg, null);
-                }
-            }
+            
 
             // rents the instrument
             startLeaseStmt.setInt(1, studentToRentID);
@@ -130,9 +165,6 @@ public class SchoolDAO {
 
         } catch (Exception e) {
             exceptionHandler(failMsg, e);
-        }  finally {
-            closeResult(currentRentals, failMsg);
-            closeResult(currentAvailable, failMsg);
         }
 
     }
@@ -146,7 +178,7 @@ public class SchoolDAO {
      * @throws SQLException
      */
     public void terminateRental(String instrumentID, String studentID) throws SchoolDBException {
-        String failMsg = "Could not terminate rental"; // TODO: this error message prints even when termination works
+        String failMsg = "Could not terminate rental";
         int affectedRows = 0;
         try {
             terminateLeaseStmt.setInt(1, Integer.parseInt(studentID));

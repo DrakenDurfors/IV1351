@@ -8,14 +8,17 @@ import model.InstrumentException;
 
 import java.util.List;
 
-public class  Controller {
+public class Controller {
     private final SchoolDAO schoolDB;
+    private final int MAX_RENTALS = 2;
 
     public Controller() throws SchoolDBException {
         schoolDB = new SchoolDAO();
     }
 
-    /**Lists all available instruments
+    /**
+     * Lists all available instruments
+     * 
      * @param type The type of instrument you want to check for
      * @return A list containing instruments
      * @throws InstrumentException if unable to get instruments
@@ -29,33 +32,46 @@ public class  Controller {
         }
     }
 
-    /**Creates a database entry for the rental
+    /**
+     * Creates a database entry for the rental
+     * 
      * @param instrumentID The id of the instrument to be rented
-     * @param studentID The id of the student who wants to rent
+     * @param studentID    The id of the student who wants to rent
      * @throws InstrumentException If unable to perform the rental
      */
     public void rentInstrument(String instrumentID, String studentID) throws InstrumentException {
         String failMsg = "Unable to rent instrument with id: '" + instrumentID + "' to studentID: '" + studentID + "'.";
-        if(instrumentID == null || studentID == null){
+        if (instrumentID == null || studentID == null) {
             throw new InstrumentException(failMsg);
         }
-
         try {
+            int rentals = schoolDB.checkRentals(studentID);
+            if (rentals >= MAX_RENTALS) {
+                throw new InstrumentException(failMsg);
+            }
+            boolean rentable = schoolDB.checkIfRentable(instrumentID);
+            if (rentable == false) {
+                throw new InstrumentException(failMsg);
+            }
+
             schoolDB.rentInstrument(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }
     }
 
-    /**Terminates the rental of a specified instrument by a specified user
+    /**
+     * Terminates the rental of a specified instrument by a specified user
+     * 
      * @param instrumentID The id of the rented instrument
-     * @param studentID The id of the student
+     * @param studentID    The id of the student
      * @throws InstrumentException If unable to perform the termination of rental
      */
     public void terminateRental(String instrumentID, String studentID) throws InstrumentException {
-        String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '" + studentID + "'.";
+        String failMsg = "Unable to terminate rental of instrument with id: '" + instrumentID + "' to studentID: '"
+                + studentID + "'.";
         try {
-           schoolDB.terminateRental(instrumentID, studentID);
+            schoolDB.terminateRental(instrumentID, studentID);
         } catch (Exception e) {
             throw new InstrumentException(failMsg, e);
         }
