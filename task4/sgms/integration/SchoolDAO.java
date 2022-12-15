@@ -13,11 +13,11 @@ import java.util.List;
 public class SchoolDAO {
     private Connection connection;
 
-    private PreparedStatement listAvailableStmt;
-    private PreparedStatement startLeaseStmt;
-    private PreparedStatement terminateLeaseStmt;
-    private PreparedStatement checkActiveLeaseStmt;
-    private PreparedStatement checkActiveRentalStmt;
+    private PreparedStatement findRentableStmt;
+    private PreparedStatement createLeaseStmt;
+    private PreparedStatement updateEndLeaseStmt;
+    private PreparedStatement findNoActiveLeaseStudentStmt;
+    private PreparedStatement findNoActiveRentalInstrumentStmt;
 
     /**
      * Constructs the Database Access Object by connecting to the database and
@@ -61,8 +61,8 @@ public class SchoolDAO {
         List<Instrument> instruments = new ArrayList<>();
         ResultSet result = null;
         try {
-            listAvailableStmt.setString(1, type);
-            result = listAvailableStmt.executeQuery();
+            findRentableStmt.setString(1, type);
+            result = findRentableStmt.executeQuery();
             while (result.next()) {
                 instruments.add(new Instrument(result.getString(1), result.getString(2), result.getFloat(3)));
             }
@@ -87,9 +87,9 @@ public class SchoolDAO {
         ResultSet resultSet = null;
         int result = 0;
         try {
-            checkActiveLeaseStmt.setInt(1, Integer.parseInt(studentID));
+            findNoActiveLeaseStudentStmt.setInt(1, Integer.parseInt(studentID));
 
-            resultSet = checkActiveLeaseStmt.executeQuery();
+            resultSet = findNoActiveLeaseStudentStmt.executeQuery();
 
             if (resultSet.next()) {
                 result = resultSet.getInt(1);
@@ -118,9 +118,9 @@ public class SchoolDAO {
         int result = 0;
         try {
             // Following checks that instrument isn't already rented
-            checkActiveRentalStmt.setInt(1, Integer.parseInt(instrumentID));
+            findNoActiveRentalInstrumentStmt.setInt(1, Integer.parseInt(instrumentID));
 
-            resultSet = checkActiveRentalStmt.executeQuery();
+            resultSet = findNoActiveRentalInstrumentStmt.executeQuery();
             if (resultSet.next()) {
                 result = resultSet.getInt(1);
             }
@@ -152,10 +152,10 @@ public class SchoolDAO {
             int instrumentToRentID = Integer.parseInt(instrumentID);
 
             // rents the instrument
-            startLeaseStmt.setInt(1, studentToRentID);
-            startLeaseStmt.setInt(2, instrumentToRentID);
+            createLeaseStmt.setInt(1, studentToRentID);
+            createLeaseStmt.setInt(2, instrumentToRentID);
 
-            affectedRows = startLeaseStmt.executeUpdate();
+            affectedRows = createLeaseStmt.executeUpdate();
             if (affectedRows != 1) {
                 exceptionHandler(failMsg, null);
             }
@@ -178,10 +178,10 @@ public class SchoolDAO {
         String failMsg = "Could not terminate rental";
         int affectedRows = 0;
         try {
-            terminateLeaseStmt.setInt(1, Integer.parseInt(studentID));
-            terminateLeaseStmt.setInt(2, Integer.parseInt(instrumentID));
+            updateEndLeaseStmt.setInt(1, Integer.parseInt(studentID));
+            updateEndLeaseStmt.setInt(2, Integer.parseInt(instrumentID));
 
-            affectedRows = terminateLeaseStmt.executeUpdate();
+            affectedRows = updateEndLeaseStmt.executeUpdate();
             if (affectedRows != 1) {
                 exceptionHandler(failMsg, null);
             }
@@ -198,17 +198,17 @@ public class SchoolDAO {
      */
     private void prepareStatements() throws SQLException {
 
-        checkActiveRentalStmt = connection.prepareStatement(
+        findNoActiveRentalInstrumentStmt = connection.prepareStatement(
                 "SELECT COUNT(*) FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL");
 
-        checkActiveLeaseStmt = connection.prepareStatement(
+        findNoActiveLeaseStudentStmt = connection.prepareStatement(
                 "SELECT COUNT(*) FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL");
 
-        startLeaseStmt = connection.prepareStatement(
+        createLeaseStmt = connection.prepareStatement(
                 "INSERT INTO instrument_lease (lease_start, lease_end, student_id, instruments_id) " +
                         "VALUES (now(),null,?,?)");
 
-        listAvailableStmt = connection.prepareStatement(
+        findRentableStmt = connection.prepareStatement(
                 "SELECT instruments.id, instruments.brand, instruments.fee " +
                         "FROM instruments, instrument_type " +
                         "WHERE " +
@@ -216,7 +216,7 @@ public class SchoolDAO {
                         "AND instruments.id NOT IN " +
                         "(SELECT DISTINCT instruments_id FROM instrument_lease WHERE lease_end IS NULL)");
 
-        terminateLeaseStmt = connection.prepareStatement(
+        updateEndLeaseStmt = connection.prepareStatement(
                 "UPDATE instrument_lease SET lease_end = NOW() " +
                         "WHERE student_id = ? AND instruments_id = ? AND lease_end IS NULL");
     }
