@@ -124,7 +124,7 @@ public class SchoolDAO {
             if (resultSet.next()) {
                 result = resultSet.getInt(1);
             }
-
+            connection.commit();
         } catch (
 
         Exception e) {
