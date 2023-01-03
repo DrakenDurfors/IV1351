@@ -1,6 +1,7 @@
 package integration;
 
 import model.Instrument;
+import model.Lease;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,8 +22,8 @@ public class SchoolDAO {
     private PreparedStatement findRentableStmt;
     private PreparedStatement createLeaseStmt;
     private PreparedStatement updateEndLeaseStmt;
-    private PreparedStatement findNoActiveLeaseStudentStmt;
-    private PreparedStatement findNoActiveRentalInstrumentStmt;
+    private PreparedStatement findActiveLeaseStudentStmt;
+    private PreparedStatement findActiveRentalInstrumentStmt;
 
     /**
      * Constructs the Database Access Object by connecting to the database and
@@ -47,10 +48,10 @@ public class SchoolDAO {
      */
     private void connectToDB() throws ClassNotFoundException, SQLException {
 
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
-        //connection =
-        //DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood","postgres",
-        //"Ladrin123");
+        // connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "admin");
+        connection =
+        DriverManager.getConnection("jdbc:postgresql://localhost:5432/soundgood","postgres",
+        "Ladrin123");
         connection.setAutoCommit(false);
     }
 
@@ -87,21 +88,24 @@ public class SchoolDAO {
      * @return The amount of rentals that student currently has
      * @throws SchoolDBException
      */
-    public int findNumberOfActiveLeasesForStudent(String studentID) throws SchoolDBException {
+    public List<Lease> findNumberOfActiveLeasesForStudent(String studentID) throws SchoolDBException {
         String failMsg = "Could not fetch student rentals";
         ResultSet resultSet = null;
-        int result = 0;
+        List<Lease> result = null;
         try {
-            findNoActiveLeaseStudentStmt.setInt(1, Integer.parseInt(studentID));
+            findActiveLeaseStudentStmt.setInt(1, Integer.parseInt(studentID));
 
-            resultSet = findNoActiveLeaseStudentStmt.executeQuery();
+            resultSet = findActiveLeaseStudentStmt.executeQuery();
 
-            if (resultSet.next()) {
-                result = resultSet.getInt(1);
-            } else {
-                exceptionHandler(failMsg, null);
+            while(resultSet.next()){
+                result.add(new Lease(
+                    resultSet.getString(1), 
+                    resultSet.getString(2), 
+                    resultSet.getString(3), 
+                    resultSet.getString(4), 
+                    resultSet.getString(5)));
             }
-            connection.commit();
+            // connection.commit();
         } catch (Exception e) {
             exceptionHandler(failMsg, e);
         } finally {
@@ -117,22 +121,25 @@ public class SchoolDAO {
      * @return The number of active rentals for the instrument
      * @throws SchoolDBException
      */
-    public int findNumberOfActiveLeasesForInstrument(String instrumentID) throws SchoolDBException {
+    public Lease findNumberOfActiveLeasesForInstrument(String instrumentID) throws SchoolDBException {
         String failMsg = "Could not check instrument";
         ResultSet resultSet = null;
-        int result = 0;
+        Lease result = null;
         try {
             // Following checks that instrument isn't already rented
-            findNoActiveRentalInstrumentStmt.setInt(1, Integer.parseInt(instrumentID));
+            findActiveRentalInstrumentStmt.setInt(1, Integer.parseInt(instrumentID));
 
-            resultSet = findNoActiveRentalInstrumentStmt.executeQuery();
+            resultSet = findActiveRentalInstrumentStmt.executeQuery();
             if (resultSet.next()) {
-                result = resultSet.getInt(1);
+                result = new Lease(
+                    resultSet.getString(1), 
+                    resultSet.getString(2), 
+                    resultSet.getString(3), 
+                    resultSet.getString(4), 
+                    resultSet.getString(5));
             }
-            connection.commit();
-        } catch (
-
-        Exception e) {
+            // connection.commit();
+        } catch (Exception e) {
             exceptionHandler(failMsg, e);
         } finally {
             closeResult(resultSet, failMsg);
@@ -203,11 +210,11 @@ public class SchoolDAO {
      */
     private void prepareStatements() throws SQLException {
 
-        findNoActiveRentalInstrumentStmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL");
+        findActiveRentalInstrumentStmt = connection.prepareStatement(
+                "SELECT * FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL FOR UPDATE");
 
-        findNoActiveLeaseStudentStmt = connection.prepareStatement(
-                "SELECT COUNT(*) FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL");
+        findActiveLeaseStudentStmt = connection.prepareStatement(
+                "SELECT * FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL FOR UPDATE");
 
         createLeaseStmt = connection.prepareStatement(
                 "INSERT INTO instrument_lease (lease_start, lease_end, student_id, instruments_id) " +

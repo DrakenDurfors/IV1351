@@ -6,6 +6,8 @@ import integration.SchoolDBException;
 import model.Instrument;
 import model.InstrumentException;
 
+import model.Lease;
+
 import java.util.List;
 
 /**
@@ -48,12 +50,13 @@ public class Controller {
             throw new InstrumentException(failMsg);
         }
         try {
-            int studentRentals = schoolDB.findNumberOfActiveLeasesForStudent(studentID);
-            if (studentRentals >= MAX_RENTALS) {
+            
+            Lease instrumentRentals = schoolDB.findNumberOfActiveLeasesForInstrument(instrumentID);
+            if (instrumentRentals != null) {
                 throw new InstrumentException(failMsg);
             }
-            int instrumentRentals = schoolDB.findNumberOfActiveLeasesForInstrument(instrumentID);
-            if (instrumentRentals != 0) {
+            List<Lease> studentRentals = schoolDB.findNumberOfActiveLeasesForStudent(studentID);
+            if (studentRentals != null && studentRentals.size() >= MAX_RENTALS) {
                 throw new InstrumentException(failMsg);
             }
 
