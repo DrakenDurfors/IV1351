@@ -91,7 +91,7 @@ public class SchoolDAO {
     public List<Lease> findNumberOfActiveLeasesForStudent(String studentID) throws SchoolDBException {
         String failMsg = "Could not fetch student rentals";
         ResultSet resultSet = null;
-        List<Lease> result = null;
+        List<Lease> result = new ArrayList<Lease>();
         try {
             findActiveLeaseStudentStmt.setInt(1, Integer.parseInt(studentID));
 
