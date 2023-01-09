@@ -51,11 +51,11 @@ public class Controller {
         }
         try {
             
-            Lease instrumentRentals = schoolDB.findNumberOfActiveLeasesForInstrument(instrumentID);
+            Lease instrumentRentals = schoolDB.findActiveLeasesForInstrument(instrumentID);
             if (instrumentRentals != null) {
                 throw new InstrumentException(failMsg);
             }
-            List<Lease> studentRentals = schoolDB.findNumberOfActiveLeasesForStudent(studentID);
+            List<Lease> studentRentals = schoolDB.findActiveLeasesForStudent(studentID);
             if (studentRentals != null && studentRentals.size() >= MAX_RENTALS) {
                 throw new InstrumentException(failMsg);
             }

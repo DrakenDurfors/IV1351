@@ -22,7 +22,7 @@ public class SchoolDAO {
     private PreparedStatement findRentableStmt;
     private PreparedStatement createLeaseStmt;
     private PreparedStatement updateEndLeaseStmt;
-    private PreparedStatement findActiveLeaseStudentStmt;
+    private PreparedStatement findActiveLeasesStudentStmt;
     private PreparedStatement findActiveRentalInstrumentStmt;
 
     /**
@@ -70,7 +70,8 @@ public class SchoolDAO {
             findRentableStmt.setString(1, type);
             result = findRentableStmt.executeQuery();
             while (result.next()) {
-                instruments.add(new Instrument(result.getString(1), result.getString(2), result.getFloat(3)));
+                instruments.add(new Instrument(
+                        result.getString(1), result.getString(2), result.getFloat(3)));
             }
             connection.commit();
         } catch (Exception e) {
@@ -82,20 +83,20 @@ public class SchoolDAO {
     }
 
     /**
-     * Checks how many rentals a student has
+     * Finds leases associated with a certain student
      *
      * @param studentID The id of the student
-     * @return The amount of rentals that student currently has
+     * @return A list of active rentals that student currently has
      * @throws SchoolDBException
      */
-    public List<Lease> findNumberOfActiveLeasesForStudent(String studentID) throws SchoolDBException {
+    public List<Lease> findActiveLeasesForStudent(String studentID) throws SchoolDBException {
         String failMsg = "Could not fetch student rentals";
         ResultSet resultSet = null;
         List<Lease> result = new ArrayList<Lease>();
         try {
-            findActiveLeaseStudentStmt.setInt(1, Integer.parseInt(studentID));
+            findActiveLeasesStudentStmt.setInt(1, Integer.parseInt(studentID));
 
-            resultSet = findActiveLeaseStudentStmt.executeQuery();
+            resultSet = findActiveLeasesStudentStmt.executeQuery();
 
             while(resultSet.next()){
                 result.add(new Lease(
@@ -115,13 +116,13 @@ public class SchoolDAO {
     }
 
     /**
-     * Finds the amount of active rentals for a certain instrument
+     * Finds the active rentals for a certain instrument. Should be zero (null) or one.
      *
-     * @param instrumentID The ID of the instrument to check
-     * @return The number of active rentals for the instrument
+     * @param instrumentID The ID of the instrument to check.
+     * @return A Lease object with info about the active rental for the instrument or null.
      * @throws SchoolDBException
      */
-    public Lease findNumberOfActiveLeasesForInstrument(String instrumentID) throws SchoolDBException {
+    public Lease findActiveLeasesForInstrument(String instrumentID) throws SchoolDBException {
         String failMsg = "Could not check instrument";
         ResultSet resultSet = null;
         Lease result = null;
@@ -213,7 +214,7 @@ public class SchoolDAO {
         findActiveRentalInstrumentStmt = connection.prepareStatement(
                 "SELECT * FROM instrument_lease WHERE instruments_id = ? AND lease_end IS NULL FOR UPDATE");
 
-        findActiveLeaseStudentStmt = connection.prepareStatement(
+        findActiveLeasesStudentStmt = connection.prepareStatement(
                 "SELECT * FROM instrument_lease WHERE student_id = ? AND lease_end IS NULL FOR UPDATE");
 
         createLeaseStmt = connection.prepareStatement(
@@ -244,7 +245,6 @@ public class SchoolDAO {
             throw new SchoolDBException(failMsg, causeOfFail);
         } else {
             throw new SchoolDBException(failMsg);
-
         }
     }
 
