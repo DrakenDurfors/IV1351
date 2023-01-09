@@ -50,7 +50,7 @@ public class Lease {
 
     /**
      * 
-     * @return The instrument brand.
+     * @return The start date of the lease.
      */
     public String getStart(){
         return this.start;
@@ -58,7 +58,7 @@ public class Lease {
 
     /**
      * 
-     * @return The cost of renting the instrument.
+     * @return The end date of the lease.
      */
     public String getEnd(){
         return this.end;
